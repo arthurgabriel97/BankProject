@@ -12,12 +12,19 @@ export class AccountService {
             ...body
         }
     })
-    return {response: "Account Created Successfully"}
+    return newAccount != null ? { response: "Account Created Successfully" } : { error: "Error creating account. Try again later!" }
   }
-  getAccountBalance(): string {
-    return 'Hello world!';
+
+  async getAccountBalance(accountId) {
+    const account = await prisma.account.findUnique({
+        where: {
+            id : +accountId
+        }
+    })
+    return account != null ? { accountId:+accountId, accountBalance: +account.balance } : { error:"This account does not exist!" }
   }
+
   getAccountStatement(): string {
-    return 'Olá mundo!';
+    return 'Extrato da conta';
   }
 }
