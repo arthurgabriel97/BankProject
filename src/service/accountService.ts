@@ -1,10 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient()
 
 @Injectable()
 export class AccountService {
 
-  createAccount(): string {
-    return "Conta criada com sucesso"
+  async createAccount(body) {
+    const newAccount = await prisma.account.create({
+        data: {
+            ...body
+        }
+    })
+    return {response: "Account Created Successfully"}
   }
   getAccountBalance(): string {
     return 'Hello world!';
