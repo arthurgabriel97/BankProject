@@ -1,13 +1,14 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Req } from '@nestjs/common';
 import { AccountService } from 'src/service/accountService';
+import { Request } from '@nestjs/common';
 
 @Controller('account')
 export class AccountController {
   constructor(private readonly appService: AccountService) {}
 
   @Post('create')
-  createAccount(): string {
-    return this.appService.createAccount();
+  createAccount(@Req() request: Request) {
+    return this.appService.createAccount(request.body);
   }
 
   @Get('account-balance')
