@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Req } from '@nestjs/common';
+import { Controller, Get, Post, Req, Query } from '@nestjs/common';
 import { AccountService } from 'src/service/accountService';
 import { Request } from '@nestjs/common';
 
@@ -12,12 +12,12 @@ export class AccountController {
   }
 
   @Get('account-balance')
-  getAccountBalance(): string {
-    return this.appService.getAccountBalance();
+  getAccountBalance(@Query() query) {
+    return this.appService.getAccountBalance(query.accountId);
   }
 
   @Get('account-statement')
-  getAccountStatement(): string {
+  getAccountStatement() {
     return this.appService.getAccountStatement();
   }
 }
