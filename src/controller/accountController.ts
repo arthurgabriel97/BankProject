@@ -15,9 +15,4 @@ export class AccountController {
   getAccountBalance(@Query() query) {
     return this.appService.getAccountBalance(query.accountId);
   }
-
-  @Get('account-statement')
-  getAccountStatement() {
-    return this.appService.getAccountStatement();
-  }
 }
