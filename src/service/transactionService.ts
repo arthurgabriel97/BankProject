@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { AccountService } from './accountService';
 
 const prisma = new PrismaClient()
 
@@ -7,12 +8,20 @@ const prisma = new PrismaClient()
 export class TransactionService {
 
   async transferValue(body) {
-    const newAccount = await prisma.account.create({
-        data: {
-            ...body
-        }
-    })
-    return newAccount != null ? { response: "Account Created Successfully" } : { error: "Error creating account. Try again later!" }
+    var withdrawalAccount = await AccountService.withdrawalValueFromAccount(body.senderAccountId, body.value)
+    var depositAccount = await AccountService.depositValueFromAccount(body.receiverAccountId, body.value)
+    console.log(withdrawalAccount)
+    if((await withdrawalAccount).withdrawalValue != null && (await depositAccount).depositValue != null ) {
+        const newAccount = await prisma.transaction.create({
+            data: {
+                ...body
+            }
+        })
+        return newAccount != null ? { response: "Transaction Created Successfully" } : { error: "Error creating transaction. Try again later!" }
+    } else {
+        return { error: "Error creating transaction. Try again later!" }
+    }
+    
   }
 
   async withdrawalValue(accountId) {
