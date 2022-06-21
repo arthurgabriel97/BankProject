@@ -9,17 +9,20 @@ export class TransactionService {
 
   async transferValue(body) {
     var withdrawalAccount = await AccountService.withdrawalValueFromAccount(body.senderAccountId, body.value)
-    var depositAccount = await AccountService.depositValueFromAccount(body.receiverAccountId, body.value)
-    console.log(withdrawalAccount)
-    if((await withdrawalAccount).withdrawalValue != null && (await depositAccount).depositValue != null ) {
-        const newAccount = await prisma.transaction.create({
-            data: {
-                ...body
-            }
-        })
-        return newAccount != null ? { response: "Transaction Created Successfully" } : { error: "Error creating transaction. Try again later!" }
+    if((await withdrawalAccount).withdrawalValue != null) {
+        var depositAccount = await AccountService.depositValueFromAccount(body.receiverAccountId, body.value)
+        if((await depositAccount).depositValue != null ) {
+            const newAccount = await prisma.transaction.create({
+                data: {
+                    ...body
+                }
+            })
+            return newAccount != null ? { response: "Transaction Created Successfully" } : { error: "Error creating transaction. Try again later!" }
+        } else {
+            return { error: depositAccount.error }
+        }
     } else {
-        return { error: "Error creating transaction. Try again later!" }
+        return { error: withdrawalAccount.error }
     }
     
   }
