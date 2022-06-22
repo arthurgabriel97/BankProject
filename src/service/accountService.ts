@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { TransactionService } from './transactionService';
 
 const prisma = new PrismaClient()
 
@@ -19,6 +20,11 @@ export class AccountService {
     const accountBalance = AccountService.getBalance(accountId)
     return accountBalance != null ? { accountId:+accountId, accountBalance: +accountBalance } : { error:"This account does not exist!" }
 
+  }
+
+  async getAccountStatement(accountId) {
+    const allTransacions = TransactionService.getTransactions(accountId)
+    return allTransacions
   }
 
   static async getBalance(accountId) {

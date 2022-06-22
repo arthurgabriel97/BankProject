@@ -21,10 +21,9 @@ model account {
 
 model transaction {
   id Int@default(autoincrement()) @id
-  senderAccountId Int
+  senderAccountId Int?
   receiverAccountId Int
   type String
   value Decimal
   date DateTime? @default(now())
-  status String
 }
