@@ -12,12 +12,13 @@ export class TransactionController {
   }
 
   @Post('withdrawal')
-  withdrawalValue(@Query() query) {
-    return this.appService.withdrawalValue(query.accountId);
+  withdrawalValue(@Req() request: Request) {
+    return this.appService.withdrawalValue(request.body);
   }
 
-  @Get('account-statement')
-  getAccountStatement() {
-    return this.appService.getAccountStatement();
+  @Post('deposit')
+  depositValue(@Req() request: Request) {
+    return this.appService.depositValue(request.body);
   }
+
 }
